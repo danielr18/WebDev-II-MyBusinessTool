@@ -1,0 +1,16 @@
+ALTER SEQUENCE role_id_role_seq RESTART WITH 1;
+ALTER SEQUENCE task_status_id_task_status_seq RESTART WITH 1;
+
+Delete from users;
+Delete from role;
+Delete from task_status;
+
+insert into role(name) values ('Admin');
+insert into role(name) values  ('Manager');
+insert into role(name) values  ('Employee');
+
+insert into users(id_role, name, password, email) values (1, 'Mr. Admin', '$2a$10$JxVDAPFtYy25/IFq/usjvuFpgP1fMfrX22ANOgNrLkUFTtKJM3O0O', 'admin@gmail.com');
+
+insert into task_status(name) values  ('Created');
+insert into task_status(name) values  ('In Process');
+insert into task_status(name) values  ('Completed');
