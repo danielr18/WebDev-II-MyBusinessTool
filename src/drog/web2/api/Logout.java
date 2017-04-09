@@ -30,13 +30,17 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("papo");
 		HttpSession session = request.getSession();		
 		response.setHeader("Content-Type", "application/json" );
+		// response.setHeader("Access-Control-Allow-Origin", "*" );
 		YaySon res = new YaySon();
 		
 		if (session.isNew()) {
-			res.add("status", 400);
-			res.add("error", "Not logged in");
+			res.add("status", 200);
+			YaySon data = new YaySon();
+			data.add("message", "Not logged in");
+			res.add("data", data);
 		} else {
 			res.add("status", 200);
 			YaySon data = new YaySon();
