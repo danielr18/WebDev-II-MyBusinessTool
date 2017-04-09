@@ -32,11 +32,14 @@ public class Logout extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();		
 		response.setHeader("Content-Type", "application/json" );
+		// response.setHeader("Access-Control-Allow-Origin", "*" );
 		YaySon res = new YaySon();
 		
 		if (session.isNew()) {
-			res.add("status", 400);
-			res.add("error", "Not logged in");
+			res.add("status", 200);
+			YaySon data = new YaySon();
+			data.add("message", "Not logged in");
+			res.add("data", data);
 		} else {
 			res.add("status", 200);
 			YaySon data = new YaySon();

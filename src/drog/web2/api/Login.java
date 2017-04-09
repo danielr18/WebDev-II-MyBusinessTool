@@ -43,8 +43,16 @@ public class Login extends HttpServlet {
 		YaySon res = new YaySon();
 		
 		if (!session.isNew()) {
-			res.add("status", 403);
-			res.add("error", "Already logged in");
+			res.add("status", 200);
+			User user = (User) session.getAttribute("user");
+			
+			YaySon jUser = new YaySon();
+			jUser.add("id_user", user.getUserId());
+			jUser.add("id_role", user.getRoleId());
+			jUser.add("name", user.getName());
+			jUser.add("email", user.getEmail());
+			
+			res.add("data", jUser);
 		} else {
 			String query = "SELECT id_user, id_role, name, email, password FROM users WHERE email = ?";
 			try {
