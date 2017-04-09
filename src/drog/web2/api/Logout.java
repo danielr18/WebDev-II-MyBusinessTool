@@ -30,7 +30,6 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("papo");
 		HttpSession session = request.getSession();		
 		response.setHeader("Content-Type", "application/json" );
 		// response.setHeader("Access-Control-Allow-Origin", "*" );
