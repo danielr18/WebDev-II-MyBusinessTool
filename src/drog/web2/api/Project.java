@@ -90,22 +90,35 @@ public class Project extends HttpServlet {
 		} else {
 			String name = request.getParameter("name");
 			String description = request.getParameter("description");
+			Integer id_leader = Integer.parseInt(request.getParameter("id_leader"));
 			Timestamp now = new Timestamp(System.currentTimeMillis());
-			String insertQuery = "INSERT INTO project(name, description, created_at) VALUES (?,?,?) returning id_project";
-			String getQuery = "SELECT id_project, name, description, created_at FROM project where id_project=?";
-			
+			String insertQuery = "INSERT INTO project(name, description, created_at, id_leader) VALUES (?,?,?,?) RETURNING id_project";
+			String getQuery = "SELECT id_project, name, description, created_at FROM project WHERE id_project=?";
+			String getLeaderQuery = "SELECT id_user, name, id_role FROM users WHERE id_user=?";
 			try {
 				JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
-				String[][] insert_result = conn.executeQuery(insertQuery, name, description, now);
-				Integer id_project = Integer.parseInt(insert_result[1][0]);
-				String[][] table = conn.executeQuery(getQuery, id_project);
-				YaySon project = new YaySon();
-				project.add("id_project", id_project);
-				project.add("name", table[1][1]);
-				project.add("description", table[1][2]);
-				project.add("created_at", table[1][3]);
-				res.add("status", 200);
-				res.add("data", project);
+				String[][] leaderTable = conn.executeQuery(getLeaderQuery, user.getUserId());
+				Integer project_leader_role_id = Integer.parseInt(leaderTable[1][2]);
+				if (project_leader_role_id <= 2) {
+					String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_leader);
+					Integer id_project = Integer.parseInt(insert_result[1][0]);
+					String[][] projectTable = conn.executeQuery(getQuery, id_project);
+					YaySon project = new YaySon();
+					YaySon project_leader = new YaySon();
+					project.add("id_project", id_project);
+					project.add("name", projectTable[1][1]);
+					project.add("description", projectTable[1][2]);
+					project.add("created_at", projectTable[1][3]);
+					project_leader.add("id_user", id_leader);
+					project_leader.add("name", leaderTable[1][1]);
+					project.add("project_leader", project_leader);
+					res.add("status", 200);
+					res.add("data", project);
+				} else {
+					res.add("status", 400);
+					res.add("error", "Assigned leader has to be at least a manager");
+				}
+				
 			} catch(Exception e) {
 				e.printStackTrace();
 				res.add("status", 500);

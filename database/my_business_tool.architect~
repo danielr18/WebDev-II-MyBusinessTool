@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="my_business_tool" />
    <property key="Connection Type" value="PostgreSQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:postgresql://localhost:5432/my_business_tool" />
    <property key="UID" value="postgres" />
    <property key="PWD" value="masterkey" />
@@ -17,7 +17,7 @@
   </data-source>
   <data-source id="DS0">
    <property key="Connection Type" value="PostgreSQL" />
-   <property key="Logical" value="my_business_tool" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:postgresql://localhost:5432/my_business_tool" />
    <property key="UID" value="postgres" />
    <property key="PWD" value="masterkey" />
@@ -29,7 +29,7 @@
   </data-source>
  </project-data-sources>
  <source-databases>
-  <database id="DB0" populated="true" UUID="2efebf43-f88d-440d-89ee-46806ffd4dfd" dbcs-ref="DS0" name="my_business_tool" physicalName="my_business_tool" >
+  <database id="DB0" populated="true" UUID="2efebf43-f88d-440d-89ee-46806ffd4dfd" dbcs-ref="DS0" name="PlayPen Database" physicalName="my_business_tool" >
    <catalog id="CAT1" populated="false" UUID="5b14b728-8796-4872-96fd-825e5beb154f" name="my_business_tool" nativeTerm="database" physicalName="my_business_tool" >
    </catalog>
    <relationships>
@@ -49,7 +49,7 @@
     <column id="COL6" populated="true" UUID="26bb2b2e-9081-4e45-be03-6752ba25be96" autoIncrement="false" autoIncrementSequenceName="users_name_seq" defaultValue="" name="name" nullable="0" physicalName="name" precision="100" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL7" populated="true" UUID="bec7e348-9da1-4fe1-a35a-1a912c7d937f" autoIncrement="false" autoIncrementSequenceName="users_password_seq" defaultValue="" name="password" nullable="0" physicalName="password" precision="60" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="-2" userDefinedTypeUUID="fc731466-848e-411a-82af-e7f5e1d504bb" >
+    <column id="COL7" populated="true" UUID="bec7e348-9da1-4fe1-a35a-1a912c7d937f" autoIncrement="false" autoIncrementSequenceName="users_password_seq" defaultValue="" name="password" nullable="0" physicalName="password" precision="60" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
     <column id="COL8" populated="true" UUID="91d6e3f9-1ce7-4737-9170-4caa6c54914a" autoIncrement="false" autoIncrementSequenceName="users_email_seq" defaultValue="" name="email" nullable="0" physicalName="email" precision="320" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -95,7 +95,7 @@
     <column id="COL18" populated="true" UUID="bd210f40-1d0c-424b-996d-cf2bd8fcb621" autoIncrement="false" autoIncrementSequenceName="project_name_seq" defaultValue="" name="name" nullable="0" physicalName="name" precision="255" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL19" populated="true" UUID="befe4294-7057-4a48-bf35-64475a802401" autoIncrement="false" autoIncrementSequenceName="project_created_at_seq" defaultValue="" name="created_at" nullable="0" physicalName="created_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL19" populated="true" UUID="befe4294-7057-4a48-bf35-64475a802401" autoIncrement="false" autoIncrementSequenceName="project_created_at_seq" defaultValue="" name="created_at" nullable="0" physicalName="created_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     <column id="COL20" populated="true" UUID="1cd49cb1-68c2-497b-8ad1-465a19227923" autoIncrement="false" autoIncrementSequenceName="project_description_seq" defaultValue="" name="description" nullable="0" physicalName="description" precision="2500" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -121,10 +121,10 @@
     <column id="COL25" populated="true" UUID="55841314-79d7-4575-9292-44ed4ce5b4a8" autoIncrement="false" autoIncrementSequenceName="project_leader_id_project_seq" defaultValue="" name="id_project" nullable="0" physicalName="id_project" precision="0" primaryKeySeq="1" referenceCount="2" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL26" populated="true" UUID="0fa23fce-6caf-4036-af50-b9052ac0ac6d" autoIncrement="false" autoIncrementSequenceName="project_leader_joined_at_seq" defaultValue="" name="joined_at" nullable="0" physicalName="joined_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL26" populated="true" UUID="0fa23fce-6caf-4036-af50-b9052ac0ac6d" autoIncrement="false" autoIncrementSequenceName="project_leader_joined_at_seq" defaultValue="" name="joined_at" nullable="0" physicalName="joined_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL27" populated="true" UUID="30fb60f4-860a-42aa-9f3b-1fcec489a8ac" autoIncrement="false" autoIncrementSequenceName="project_leader_left_at_seq" defaultValue="" name="left_at" nullable="0" physicalName="left_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL27" populated="true" UUID="30fb60f4-860a-42aa-9f3b-1fcec489a8ac" autoIncrement="false" autoIncrementSequenceName="project_leader_left_at_seq" defaultValue="" name="left_at" nullable="1" physicalName="left_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     <column id="COL28" populated="true" UUID="4ac68a6b-d547-4ac7-b351-a0479c10dbf8" autoIncrement="false" autoIncrementSequenceName="project_leader_active_seq" defaultValue="" name="active" nullable="0" physicalName="active" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="16" userDefinedTypeUUID="a26374aa-3026-4bb8-b564-eb2e186dfa5d" >
@@ -157,10 +157,10 @@
     <column id="COL36" populated="true" UUID="92eb21a1-40db-46c3-8a40-a731dbb0a2b4" autoIncrement="false" autoIncrementSequenceName="task_description_seq" defaultValue="" name="description" nullable="0" physicalName="description" precision="2500" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
      <remarks></remarks>
     </column>
-    <column id="COL37" populated="true" UUID="0e3e1d41-4d27-4f7a-b4a9-9dd63a36f1e5" autoIncrement="false" autoIncrementSequenceName="task_created_at_seq" defaultValue="" name="created_at" nullable="0" physicalName="created_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL37" populated="true" UUID="0e3e1d41-4d27-4f7a-b4a9-9dd63a36f1e5" autoIncrement="false" autoIncrementSequenceName="task_created_at_seq" defaultValue="" name="created_at" nullable="0" physicalName="created_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
-    <column id="COL38" populated="true" UUID="6b7b7c21-f53f-4591-9bbb-f0d729931467" autoIncrement="false" autoIncrementSequenceName="task_ended_at_seq" defaultValue="" name="ended_at" nullable="0" physicalName="ended_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
+    <column id="COL38" populated="true" UUID="6b7b7c21-f53f-4591-9bbb-f0d729931467" autoIncrement="false" autoIncrementSequenceName="task_ended_at_seq" defaultValue="" name="ended_at" nullable="1" physicalName="ended_at" precision="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="93" userDefinedTypeUUID="6497d8de-0e00-40d6-a42e-e2adca83be64" >
      <remarks></remarks>
     </column>
     <column id="COL39" populated="true" UUID="c55dc616-3651-40c1-acba-ade449756a09" autoIncrement="false" autoIncrementSequenceName="task_id_task_status_seq" defaultValue="" name="id_task_status" nullable="0" physicalName="id_task_status" precision="0" referenceCount="2" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
