@@ -1,0 +1,41 @@
+#Meant to keep used queries in case we change them or they get screwed up Postgres direct syntax
+
+#Task
+#GET
+#GetOneTask
+SELECT task.id_task, project.name as pname, task.name as tname, task.description, task.created_at, task_status.name as sname, users.name as uname FROM task 
+							 INNER JOIN project ON task.id_project = project.id_project
+							 INNER JOIN task_status ON task.id_task_status = task_status.id_task_status
+							 INNER JOIN task_user ON task.id_task = task_user.id_task
+							 INNER JOIN users ON task_user.id_user = users.id_user
+							 where task.id_task=?
+#Belongs to project by *
+SELECT users.id_user 
+					FROM users 
+					 INNER JOIN task_user ON users.id_user = task_user.id_user 
+					 INNER JOIN task ON task_user.id_task = task.id_task 
+					 INNER JOIN project ON  task.id_project = project.id_project 
+					 WHERE project.id_project=1
+					 AND users.id_user =1
+
+#getAllTasks
+SELECT task.id_task, task.name, project.name, task_status.name, users.name, task.description, task.created_at 
+								 FROM task 
+								 INNER JOIN project ON  task.id_project = project.id_project
+								 INNER JOIN task_status ON task.id_task_status = task_status.id_task_status 
+								 INNER JOIN task_user ON task.id_task = task_user.id_task 
+							 	 INNER JOIN users ON task_user.id_user = users.id_user 
+								 WHERE project.id_project=1
+
+#get project id from task
+SELECT project.id_project 
+					FROM project 
+					INNER JOIN task ON project.id_project = task.id_project 
+					WHERE task.id_task=1
+
+#POST
+#Get just inserted task data
+"SELECT task.id_task, task.name, task.description, task.created_at, task_status.name"
+					+ "FROM task "
+					+ "INNER JOIN task_status ON task.id_task_status = task_status.id_task_status"
+					+ "WHERE id_task=?";
