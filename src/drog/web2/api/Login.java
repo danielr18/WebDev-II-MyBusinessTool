@@ -39,12 +39,12 @@ public class Login extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		HttpSession session = request.getSession();		
+		User user = (User) session.getAttribute("user");
 		response.setHeader("Content-Type", "application/json" );
 		YaySon res = new YaySon();
 		
-		if (!session.isNew()) {
+		if (!session.isNew() && user != null) {
 			res.add("status", 200);
-			User user = (User) session.getAttribute("user");
 			
 			YaySon jUser = new YaySon();
 			jUser.add("id_user", user.getUserId());
@@ -61,12 +61,12 @@ public class Login extends HttpServlet {
 				if (table.length > 1 && BCrypt.checkpw(password, table[1][4])) {
 					Integer id_user = Integer.parseInt(table[1][0]);
 					Integer id_role = Integer.parseInt(table[1][1]);
-					User user = new User(id_user, id_role, table[1][2], table[1][3]);
+					user = new User(id_user, id_role, table[1][2], table[1][3]);
 					session.setAttribute("user", user);
 					res.add("status", 200);
 					YaySon jUser = new YaySon();
 					jUser.add("id_user", id_user);
-					jUser.add("id_role", id_user);
+					jUser.add("id_role", id_role);
 					jUser.add("name", table[1][2]);
 					jUser.add("email", table[1][3]);
 					res.add("data", jUser);
