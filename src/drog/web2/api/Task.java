@@ -84,15 +84,7 @@ public class Task extends HttpServlet {
 			try {
 				JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
 				String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_project,id_task_status);
-				String[][] taskTable = conn.executeQuery(getQuery, Integer.parseInt(insert_result[1][0]));
-				YaySon task = new YaySon();
-				task.add("id_project", id_project.toString());
-				task.add("name", taskTable[1][1]);
-				task.add("description", taskTable[1][2]);
-				task.add("created_at", taskTable[1][3]);
-				task.add("status", taskTable[1][4]);
-				res.add("status", 200);
-				res.add("data", task);
+				res  = this.getOneTask(request, Integer.parseInt(insert_result[1][0]));
 			} catch(Exception e) {
 				e.printStackTrace();
 				res.add("status", 500);
@@ -288,7 +280,7 @@ public class Task extends HttpServlet {
 						task.add("status", table[1][3]);
 						task.add("description", table[1][4]);
 						task.add("created_at", table[1][5]);
-						task.add("ended_at", table[1][6]);
+						if (table[1][6] != "") task.add("ended_at", table[1][6]);
 						String[][] usersTable = conn.executeQuery(usersQuery, id_task);
 						YaySonArray ysa = (usersTable != null && usersTable.length < 2 )? null : new YaySonArray();
 						if(ysa != null){
