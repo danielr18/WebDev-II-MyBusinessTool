@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Row, Col, Jumbotron } from 'react-bootstrap'
 
 import './HomeView.scss'
-import CreateProjectForm from 'containers/CreateProjectForm'
+import CreateProjectForm from '../containers/CreateProjectForm'
 import ProjectActions from 'store/project'
 import ProjectCard from './ProjectCard'
 
