@@ -2,6 +2,7 @@ import { stringify as qs } from 'qs'
 
 import axios from 'utils/axios'
 import { UserTypes } from '../user'
+import { ProjectTypes } from '../project'
 
 export const login = (email, password) => (dispatch, getState) => {
   dispatch({ type: UserTypes.LOGIN })
@@ -24,6 +25,7 @@ export const signout = () => (dispatch, getState) => {
   dispatch({ type: UserTypes.SIGNOUT })
   return axios.post('api/logout', {})
     .then(() => {
+      dispatch({ type: ProjectTypes.PROJECT_RESET })
       dispatch({
         type: UserTypes.SIGNOUT_SUCCESS
       })
