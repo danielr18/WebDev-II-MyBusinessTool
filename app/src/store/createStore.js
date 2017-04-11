@@ -49,7 +49,7 @@ export default (initialState = {}) => {
     })
   }
 
-  // persistStore(store)
+  persistStore(store).purge()
 
   return store
 }

@@ -1,5 +1,14 @@
-.duck {
-  display: block;
-  width: 120px;
-  margin: 1.5rem auto;
+.col-project-card {
+  margin-bottom: 20px;
+}
+
+.projects-header {
+  background-color: #F24236;
+  color: white;
+  padding: 10px;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+  }
 }

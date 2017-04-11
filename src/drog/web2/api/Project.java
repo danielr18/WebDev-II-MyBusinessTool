@@ -13,6 +13,7 @@ import org.mindrot.BCrypt;
 
 import darb.web2.JDBConnection;
 import darb.web2.yayson.YaySon;
+import darb.web2.yayson.YaySonArray;
 import drog.web2.User;
 
 /**
@@ -39,24 +40,17 @@ public class Project extends HttpServlet {
 		response.setHeader("Content-Type", "application/json" );
 		YaySon res = new YaySon();
 		
-		if (session.isNew() || user.getRoleId() != 1) {
+		if (session.isNew()) {
 			res.add("status", 403);
 			res.add("error", "No permission to access this resource");
 		} else {
-			Integer id_project = null;
-			
-			try {
-				id_project = Integer.parseInt(request.getParameter("id_project"));
-			} catch(NumberFormatException e) {
-				res.add("status", 403);
-				res.add("error", "Invalid project id");
-			}
-			
+			String id_project = request.getParameter("id_project");
+		
 			if (id_project != null) {
 				try {
 					String query = "SELECT id_project, name, description, created_at FROM project where id_project=?";
 					JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
-					String[][] table = conn.executeQuery(query, id_project);
+					String[][] table = conn.executeQuery(query, Integer.parseInt(id_project));
 					YaySon project = new YaySon();
 					project.add("id_project", id_project);
 					project.add("name", table[1][1]);
@@ -69,6 +63,33 @@ public class Project extends HttpServlet {
 					res.add("status", 500);
 					session.invalidate();
 				}	
+			} else {
+				try {
+					String query = "SELECT project.id_project, project.name, project.description, project.created_at, users.id_user, users.name FROM project INNER JOIN users ON project.id_leader = users.id_user";
+					JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
+					String[][] table = conn.executeQuery(query);
+					YaySonArray projects = new YaySonArray();
+					
+					for(Integer i = 1 ; i < table.length ; i++){
+						YaySon project = new YaySon();
+						YaySon project_leader = new YaySon();
+						project.add("id_project", Integer.parseInt(table[i][0]));
+						project.add("name", table[i][1]);
+						project.add("description", table[i][2]);
+						project.add("created_at", table[i][3]);
+						project_leader.add("id_user", Integer.parseInt(table[i][4]));
+						project_leader.add("name", table[i][5]);
+						project.add("project_leader", project_leader);
+						projects.push(project);
+					}
+					
+					res.add("status", 200);
+					res.add("data", projects);
+				} catch(Exception e) {
+					e.printStackTrace();
+					res.add("status", 500);
+					session.invalidate();
+				}
 			}
 		}		
 		
@@ -97,7 +118,7 @@ public class Project extends HttpServlet {
 			String getLeaderQuery = "SELECT id_user, name, id_role FROM users WHERE id_user=?";
 			try {
 				JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
-				String[][] leaderTable = conn.executeQuery(getLeaderQuery, user.getUserId());
+				String[][] leaderTable = conn.executeQuery(getLeaderQuery, id_leader);
 				Integer project_leader_role_id = Integer.parseInt(leaderTable[1][2]);
 				if (project_leader_role_id <= 2) {
 					String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_leader);

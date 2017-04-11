@@ -1,0 +1,23 @@
+.card {
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  background-color: white;
+
+  &.padded {
+    padding: 15px;
+  }
+
+  .card-header  {
+    background-color: #86615C;
+    color: white;
+    padding: 5px 15px;
+  }
+
+  .card-body {
+    padding: 5px 15px;
+  }
+
+  .card-footer {
+    padding: 0 15px 10px;
+  }
+
+}
