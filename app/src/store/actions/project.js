@@ -20,6 +20,24 @@ export const getProjects = () => (dispatch, getState) => {
     })
 }
 
+//eslint-disable-next-line
+export const getProject = (id_project) => (dispatch, getState) => {
+  dispatch({ type: ProjectTypes.GET_PROJECT, id_project })
+  return axios.get('api/project', { params: { id_project } })
+    .then(({ data: { data } }) => {
+      dispatch({
+        type: ProjectTypes.GET_PROJECT_SUCCESS,
+        project: data
+      })
+    })
+    .catch(({ response: { data } }) => {
+      dispatch({
+        type: ProjectTypes.GET_PROJECT_ERROR,
+        error: data
+      })
+    })
+}
+
 export const createProject = (project) => (dispatch, getState) => {
   dispatch({ type: ProjectTypes.CREATE_PROJECT })
   return axios.post('api/project', qs(project))

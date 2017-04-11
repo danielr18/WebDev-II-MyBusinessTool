@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import { Button } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import Card from 'components/Card'
+import url from 'utils/url'
 
 export const ProjectCard = (props) => (
   <Card className="project-card" padded={false}>
@@ -14,7 +16,9 @@ export const ProjectCard = (props) => (
     </div>
 
     <footer className="card-footer">
-      <Button className="primary-btn">View Project</Button>
+      <LinkContainer to={url(`/project/${props.id_project}`)}>
+        <Button className="primary-btn">View Project</Button>
+      </LinkContainer>
     </footer>
   </Card>
 )

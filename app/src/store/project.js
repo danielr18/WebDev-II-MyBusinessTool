@@ -4,6 +4,9 @@ import * as actions from './actions/project'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
+  getProject: actions.getProject,
+  getProjectSuccess: ['project'],
+  getProjectError: ['error'],
   getProjects: actions.getProjects,
   getProjectsSuccess: ['projects'],
   getProjectsError: ['error'],
@@ -37,6 +40,12 @@ export const getProjectsSuccess = (state, { projects }) => Object.assign({}, sta
   error: null
 })
 
+export const getProjectSuccess = (state, { project }) => Object.assign({}, state, {
+  project,
+  fetching: false,
+  error: null
+})
+
 export const createProjectSuccess = (state, { project }) => Object.assign({}, state, {
   projects: [...state.projects, project],
   fetching: false,
@@ -56,6 +65,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_PROJECTS]: request,
   [Types.GET_PROJECTS_SUCCESS]: getProjectsSuccess,
   [Types.GET_PROJECTS_ERROR]: error,
+  [Types.GET_PROJECT]: request,
+  [Types.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [Types.GET_PROJECT_ERROR]: error,
   [Types.CREATE_PROJECT]: request,
   [Types.CREATE_PROJECT_SUCCESS]: createProjectSuccess,
   [Types.CREATE_PROJECT_ERROR]: error,

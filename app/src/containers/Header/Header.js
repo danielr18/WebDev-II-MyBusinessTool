@@ -144,11 +144,7 @@ export class Header extends Component {
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav>
-            <LinkContainer to={url('/counter')}>
-              <NavItem eventKey={1}>Counter</NavItem>
-            </LinkContainer>
-          </Nav>
+          <Nav />
           <Nav pullRight>
             {user ? (
               this.renderUserDropdown()
