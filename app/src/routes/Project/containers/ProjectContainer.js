@@ -14,7 +14,9 @@ import Project from '../components/Project'
 
 const mapDispatchToProps = (dispatch) => ({
   //eslint-disable-next-line
-  getProject: (id_project) => dispatch(ProjectActions.getProject(id_project))
+  getProject: (id_project) => dispatch(ProjectActions.getProject(id_project)),
+  //eslint-disable-next-line
+  getTasks: (id_project) => dispatch(ProjectActions.getTasks(id_project))
 })
 
 const mapStateToProps = (state) => ({

@@ -70,7 +70,6 @@ export class CreateProjectForm extends Component {
   }
 
   onLeaderChange = e => {
-    console.log(e.target.value);
     e.persist()
     this.setState((state) => ({
       project: Object.assign({}, state.project, { id_leader: e.target.value })

@@ -5,11 +5,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.function.Consumer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.rowset.Predicate;
 
 import darb.web2.JDBConnection;
 import darb.web2.yayson.YaySon;
@@ -80,16 +75,15 @@ public class Task extends HttpServlet {
 			String description = request.getParameter("description");
 			Integer id_project = Integer.parseInt(request.getParameter("id_project"));
 			Timestamp now = new Timestamp(System.currentTimeMillis());
-			Timestamp ended = new Timestamp(0);
 			Integer id_task_status = 1;
-			String insertQuery = "INSERT INTO task(name, description, created_at, id_project,id_task_status,ended_at) VALUES (?,?,?,?,?,?) RETURNING id_task";
+			String insertQuery = "INSERT INTO task(name, description, created_at, id_project,id_task_status) VALUES (?,?,?,?,?) RETURNING id_task";
 			String getQuery = "SELECT task.id_task, task.name, task.description, task.created_at, task_status.name "
 					+ "FROM task "
 					+ "INNER JOIN task_status ON task.id_task_status = task_status.id_task_status "
 					+ "WHERE id_task=?";
 			try {
 				JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
-				String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_project,id_task_status,ended);
+				String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_project,id_task_status);
 				String[][] taskTable = conn.executeQuery(getQuery, Integer.parseInt(insert_result[1][0]));
 				YaySon task = new YaySon();
 				task.add("id_project", id_project.toString());
@@ -364,7 +358,7 @@ public class Task extends HttpServlet {
 							y.add("status", table[i][3] == null ? "": table[i][3]);
 							y.add("description", table[i][4] == null ? "": table[i][4]);
 							y.add("created_at", table[i][5] == null ? "": table[i][5]);
-							y.add("ended_at", table[i][6] == null ? "": table[i][6]);
+							if (table[i][6] != "") y.add("ended_at", table[i][6]);
 							String[][] usersTable = table[i][0] == null ? null : conn.executeQuery(usersQueryTask,Integer.parseInt(table[i][0]));
 							YaySonArray ysa = new YaySonArray();
 							if(usersTable != null && usersTable.length>1){
