@@ -243,7 +243,7 @@ public class Task extends HttpServlet {
 				task.add("created_at", created_at);
 				task.add("status", status);
 				task.add("ended_at", ended_at);
-				task.add("Users", ysa == null? new YaySon(): ysa);
+				task.add("Users", ysa == null? new YaySonArray(): ysa);
 				res.add("status", 200);
 				res.add("data", task);
 			} catch(Exception e) {
@@ -305,7 +305,7 @@ public class Task extends HttpServlet {
 									ysa.push(ys);
 							}
 						}
-						task.add("users", ysa == null? new YaySon() : ysa);
+						task.add("users", ysa == null? new YaySonArray() : ysa);
 						res.add("status", 200);
 						res.add("data", task);
 					} catch(Exception e) {
@@ -363,8 +363,8 @@ public class Task extends HttpServlet {
 							y.add("project_name", table[i][2] == null ? "": table[i][2]);
 							y.add("status", table[i][3] == null ? "": table[i][3]);
 							y.add("description", table[i][4] == null ? "": table[i][4]);
-							y.add("creation_dates", table[i][5] == null ? "": table[i][5]);
-							y.add("end_dates", table[i][6] == null ? "": table[i][6]);
+							y.add("created_at", table[i][5] == null ? "": table[i][5]);
+							y.add("ended_at", table[i][6] == null ? "": table[i][6]);
 							String[][] usersTable = table[i][0] == null ? null : conn.executeQuery(usersQueryTask,Integer.parseInt(table[i][0]));
 							YaySonArray ysa = new YaySonArray();
 							if(usersTable != null && usersTable.length>1){
@@ -375,9 +375,8 @@ public class Task extends HttpServlet {
 										ys.add("role",usersTable[j][2] == null?  "": usersTable[j][2]);
 										ysa.push(ys);
 								}
-								y.add("users", ysa);
-								System.out.println(y);
 							}
+							y.add("users", ysa);
 							tArray.push(y);
 						}
 						res.add("status", 200);
