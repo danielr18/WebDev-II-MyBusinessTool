@@ -11,14 +11,16 @@ import {
 import './Task.scss'
 import Card from 'components/Card'
 import axios from 'utils/axios'
+import url from 'utils/url'
 import DocumentActions from 'store/document'
+import { Link } from 'react-router'
 export default class Task extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       users: [],
-      documents : this.props.documents,
+      documents : props.documents,
       task_assigned_users: [],
       file : null
     }
@@ -68,11 +70,21 @@ export default class Task extends Component {
     this.props.createDocument(fd,config);
   }
 
+  download(id_document){
+    const u = url(`/static/docs?id_document=${id_document}`);
+    axios.post(u,{headers: {"Access-Control-Allow-Origin": "*"}})
+      .then(response => {
+        window.open(u);
+      })
+      .catch(response => {
+      })
+  }
+
   render() {
     const { users } = this.state
     const { task } = this.props
     const { documents } = this.state
-    
+    const u = url('/static/docs?id_document=')
     return (
       <div className="container">
         <Row>
@@ -100,18 +112,19 @@ export default class Task extends Component {
           <Card>
             <FormGroup value={task ? [] : []}>
               <ControlLabel>Related Documents</ControlLabel>
-              <FormControl componentClass="select" placeholder="select" multiple>
                 {
+
                   documents.map(doc =>
-                    <option
-                      key={doc.id_document}
-                      value={doc.id_document}
-                    >
-                      {doc.name}
-                    </option>
+                    // <option
+                    //   key={doc.id_document}
+                    //   value={doc.id_document}
+                    //   onClick= {e => this.download(doc.id_document)}
+                    // >
+                    //   {doc.name}
+                    // </option>
+                    <Link to={`${u}${doc.id_document}`}>{doc.name}</Link>
                   )
                 }
-              </FormControl>
               <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
             </FormGroup>
           </Card>
