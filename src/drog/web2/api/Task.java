@@ -2,10 +2,6 @@ package drog.web2.api;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import darb.web2.JDBConnection;
 import darb.web2.yayson.YaySon;
 import darb.web2.yayson.YaySonArray;
+import drog.web2.NotificationSocket;
 import drog.web2.User;
 
 //TODO:Major refactor if we have time
@@ -39,6 +37,8 @@ public class Task extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();		
+		User user = (User) session.getAttribute("user");
 		// TODO Auto-generated method stub
 		String id_task = request.getParameter("id_task");
 		String id_project= request.getParameter("id_project") ;

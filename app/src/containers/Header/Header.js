@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import './Header.scss'
 import url from '../../utils/url'
 import UserActions from '../../store/user'
+import SocketActions from '../../store/socket'
 
 export class Header extends Component {
   constructor(props) {
@@ -30,7 +31,15 @@ export class Header extends Component {
   static propTypes = {
     login: PropTypes.func,
     signout: PropTypes.func,
+    connectSocket: PropTypes.func,
+    disconnectSocket: PropTypes.func,
     user: PropTypes.object
+  }
+
+  componentDidMount() {
+    if (this.props.user) {
+      this.props.connectSocket('ws://localhost:8080/MyBusinessTool/notifications')
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,6 +47,14 @@ export class Header extends Component {
       this.setState({
         isAuthDropdownOpen: false
       })
+    }
+
+    if (!this.props.user && nextProps.user) {
+      this.props.connectSocket('ws://localhost:8080/MyBusinessTool/notifications')
+    }
+
+    if (this.props.user && !nextProps.user) {
+      this.props.disconnectSocket()
     }
   }
 
@@ -164,7 +181,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   login: (email, password) => dispatch(UserActions.login(email, password)),
-  signout: () => dispatch(UserActions.signout())
+  signout: () => dispatch(UserActions.signout()),
+  connectSocket: (url) => dispatch(SocketActions.wsConnect(url)),
+  disconnectSocket: () => dispatch(SocketActions.wsDisconnect())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

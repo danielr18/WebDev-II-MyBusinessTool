@@ -1,19 +1,20 @@
 package drog.web2.api;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
-
-import org.mindrot.BCrypt;
+import javax.websocket.Session;
 
 import darb.web2.JDBConnection;
 import darb.web2.yayson.YaySon;
 import darb.web2.yayson.YaySonArray;
+import drog.web2.NotificationSocket;
 import drog.web2.User;
 
 /**
@@ -36,7 +37,6 @@ public class Project extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();		
-		User user = (User) session.getAttribute("user");
 		response.setHeader("Content-Type", "application/json" );
 		YaySon res = new YaySon();
 		
@@ -124,6 +124,11 @@ public class Project extends HttpServlet {
 					String[][] insert_result = conn.executeQuery(insertQuery, name, description, now, id_leader);
 					Integer id_project = Integer.parseInt(insert_result[1][0]);
 					String[][] projectTable = conn.executeQuery(getQuery, id_project);
+					try {
+						NotificationSocket.sendNotification(id_leader, "You've been assigned as the leader to Project: \"" + name +"\"", "info");
+					} catch(NullPointerException | IOException e) {
+						System.out.println("User to be notified is not online.");
+					}
 					YaySon project = new YaySon();
 					YaySon project_leader = new YaySon();
 					project.add("id_project", id_project);

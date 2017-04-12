@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import darb.web2.JDBConnection;
 import darb.web2.yayson.YaySon;
 import darb.web2.yayson.YaySonArray;
+import drog.web2.NotificationSocket;
 import drog.web2.User;
 
 /**
@@ -104,40 +105,47 @@ public class TaskEdit extends HttpServlet {
 				
 				if(request.getParameter("assigned_users") != null){
 					String[] us = request.getParameter("assigned_users").split(",");
-					Integer count = us.length;
-					if(currentUserIds != null){
-						synchronized(us){
-							List<String> tmpUs = Arrays.asList(us);
-							List<String> currUs =  Arrays.asList(currentUserIds);
-							ArrayList<Integer> idNums = new ArrayList<>();
-							for(String str : tmpUs){
-								if(currUs.contains(str)){
+					synchronized(us) {
+						Integer count = us.length;
+						if (currentUserIds != null) {
+								List<String> tmpUs = Arrays.asList(us);
+								List<String> currUs =  Arrays.asList(currentUserIds);
+								ArrayList<Integer> idNums = new ArrayList<>();
+								for(String str : tmpUs){
+									if(currUs.contains(str)){
+									}
+									else idNums.add(Integer.parseInt(str));
 								}
-								else idNums.add(Integer.parseInt(str));
+								users = idNums.toArray(new Integer[1]);
+						}
+						else {
+							ArrayList<Integer> idNums = new ArrayList<>();
+							for(String str : us){
+								idNums.add(Integer.parseInt(str));
 							}
 							users = idNums.toArray(new Integer[1]);
 						}
-					}
-					else{
-						ArrayList<Integer> idNums = new ArrayList<>();
-						for(String str : us){
-							idNums.add(Integer.parseInt(str));
-						}
-						users = idNums.toArray(new Integer[1]);
-					}
-					if(users != null && users.length>0){
-						
-						String taskUsersQuery = taskUsersInsert;
-						for(Integer i = 0; i < users.length; i++){
-							if(i == users.length -1){
-								taskUsersQuery += "( " + id_task + ","+ users[i] + " )";
+						if (users != null && users.length>0) {
+							
+							String taskUsersQuery = taskUsersInsert;
+							for(Integer i = 0; i < users.length; i++){
+								if(i == users.length -1){
+									taskUsersQuery += "( " + id_task + ","+ users[i] + " )";
+								}
+								else{
+									taskUsersQuery += "( " + id_task + " , "+ users[i] + " ), ";
+								}
+								
+								try {
+									NotificationSocket.sendNotification(users[i], "You've been assigned to the task: \"" + name +"\"", "info");
+								} catch(NullPointerException | IOException e) {
+									System.out.println("User to be notified is not online.");
+								}
+								
 							}
-							else{
-								taskUsersQuery += "( " + id_task + " , "+ users[i] + " ), ";
-							}
+							System.out.print(taskUsersQuery);
+							conn.execute(taskUsersQuery, id_task);
 						}
-						System.out.print(taskUsersQuery);
-						conn.execute(taskUsersQuery, id_task);
 					}
 				}
 				taskTable = conn.executeQuery(getQuery, id_task);

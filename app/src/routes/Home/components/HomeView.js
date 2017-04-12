@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Jumbotron } from 'react-bootstrap'
 
+import SocketActions from 'store/socket'
 import './HomeView.scss'
 import CreateProjectForm from '../containers/CreateProjectForm'
 import ProjectActions from 'store/project'
