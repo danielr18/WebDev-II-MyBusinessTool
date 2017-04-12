@@ -26,7 +26,7 @@ export const createDocument = (document,config) => (dispatch, getState) => {
     .then(({data : data}) => {
       dispatch({
         type: DocumentTypes.CREATE_DOCUMENT_SUCCESS,
-        document : data
+        document : data.data
       })
     })
     .catch(({ response: { data } }) => {

@@ -19,6 +19,9 @@ const { Types, Creators } = createActions({
   createTask: actions.createTask,
   createTaskSuccess: ['task'],
   createTaskError: ['error'],
+  changeTask: actions.changeTask,
+  changeTaskSuccess: ['task'],
+  changeTaskError: ['error'],
   projectReset: []
 })
 
@@ -72,6 +75,23 @@ export const createTaskSuccess = (state, { task }) => Object.assign({}, state, {
   error: null
 })
 
+function edtask(tasks,task){
+  let newTasks = [];
+  newTasks = tasks.map( (t) => {
+    if(t.id_task == task.id_task){
+      return Object.assign({},t,task);
+    }
+    return t;
+  })
+  return newTasks;
+}
+
+export const changeTaskSuccess = (state, { task }) => Object.assign({}, state, {
+  tasks: edtask(state.tasks,task),
+  fetching: false,
+  error: null
+})
+
 export const error = (state, { error }) => Object.assign({}, state, {
   error,
   fetching: false
@@ -97,5 +117,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.CREATE_TASK]: request,
   [Types.CREATE_TASK_SUCCESS]: createTaskSuccess,
   [Types.CREATE_TASK_ERROR]: error,
+  [Types.CHANGE_TASK]: request,
+  [Types.CHANGE_TASK_SUCCESS]: changeTaskSuccess,
+  [Types.CHANGE_TASK_ERROR]: error,
   [Types.PROJECT_RESET]: reset
 })

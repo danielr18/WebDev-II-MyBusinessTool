@@ -34,6 +34,7 @@ public class User extends HttpServlet {
 		// TODO Auto-generated method stub
 		Integer id_role = request.getParameter("id_role") == null ? null :Integer.parseInt(request.getParameter("id_role"));
 		Integer id_user = request.getParameter("id_user") == null? null : Integer.parseInt(request.getParameter("id_user"));
+		Integer id_task = request.getParameter("id_task") == null? null : Integer.parseInt(request.getParameter("id_task"));
 		HttpSession session = request.getSession();
 		drog.web2.User user = (drog.web2.User) session.getAttribute("user");
 		response.setHeader("Content-Type", "application/json" );
@@ -43,11 +44,14 @@ public class User extends HttpServlet {
 			res.add("error", "No permission to access this resource");
 		}
 		else{
-			if(id_role != null){
+			if(id_role != null ){
 				res = getUsersAboveRole(id_role);
 			}
-			else if(id_user != null){
+			else if(id_user != null ){
 				res = getUserById(id_user);
+			}
+			else if(id_task != null){
+				res = getUsersForTask(id_task);
 			}
 			else{
 				res.add("status",403);
@@ -56,6 +60,36 @@ public class User extends HttpServlet {
 		}
 		response.setStatus(res.getInteger("status"));
 		response.getWriter().print(res.toJSON());
+	}
+
+	private YaySon getUsersForTask(Integer id_task) {
+		YaySon res = new YaySon();
+		String query = "Select users.id_user, users.name, role.name "
+				+ "From users "
+				+ "INNER JOIN role ON users.id_role = role.id_role "
+				+ "INNER JOIN task_user ON users.id_user = task_user.id_user "
+				+ "INNER JOIN task ON task_user.id_task = task.id_task "
+				+ "WHERE task.id_task = ?";
+		try{
+			String[][] usersTable = null;
+			JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");						
+			usersTable = conn.executeQuery(query, id_task);
+			YaySonArray users= new YaySonArray();
+			
+			for(Integer i =1 ; i < usersTable.length ; i++){
+				YaySon JUser = new YaySon();
+				JUser.add("id_user", usersTable[i][0]);
+				JUser.add("name", usersTable[i][1]);
+				JUser.add("role", usersTable[i][2]);
+				users.push(JUser);
+			}
+			res.add("status",200);
+			res.add("data",users);
+		} catch (Exception e){
+			res.add("status",403);
+			res.add("data","Invalid role");
+		}
+		return res;
 	}
 
 	/**

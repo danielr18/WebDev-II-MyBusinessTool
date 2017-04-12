@@ -20,7 +20,7 @@ export default class Task extends Component {
     super(props)
     this.state = {
       users: [],
-      documents : props.documents,
+      documents : [],
       task_assigned_users: [],
       file : null
     }
@@ -28,7 +28,7 @@ export default class Task extends Component {
 
   componentDidMount() {
     // this.props.getTask(this.props.params.id_task)
-    axios.get('/api/user?id_role=3')
+    axios.get(`/api/user?id_task=${this.props.params.id_task}`)
       .then(response => {
         const users = response.data.data
         this.setState({
@@ -70,6 +70,17 @@ export default class Task extends Component {
     this.props.createDocument(fd,config);
   }
 
+  // componentWillReceiveProps(nextProps){
+  //   console.log("next props");
+  //   console.log(nextProps);
+  //   if(this.props !== nextProps){
+  //     this.setState({
+  //         documents: nextProps.documents
+  //       }
+  //     );
+  //   }
+  // }
+
   download(id_document){
     const u = `http://localhost:8080/MyBusinessTool/static/docs?id_document=${id_document}`;
     axios.post(u,{headers: {"Access-Control-Allow-Origin": "*"}})
@@ -83,7 +94,7 @@ export default class Task extends Component {
   render() {
     const { users } = this.state
     const { task } = this.props
-    const { documents } = this.state
+    const { documents } = this.props
     const u = 'http://localhost:8080/MyBusinessTool/static/docs?id_document=';
     return (
       <div className="container">
@@ -110,9 +121,12 @@ export default class Task extends Component {
           </Col>
           <Col sm={4}>
             <Card>
+            <ControlLabel>Assigned Documents</ControlLabel>
               {
                 documents.map(doc =>
-                  <a href={`${u}${doc.id_document}`}>{doc.name}</a>
+                  <div>
+                    <a href={`${u}${doc.id_document}`}>{doc.name}</a><br/>
+                  </div>
                 )
               }
             </Card>
@@ -121,7 +135,7 @@ export default class Task extends Component {
             <Card>
               <FormGroup value={task ? [] : []}>
                 <ControlLabel>Related Documents</ControlLabel>
-                  <FormControl type="file" value="" onChange = {e => {
+                  <FormControl type="file" value="" style={{color: 'transparent'}} onChange = {e => {
                     let file = e.target.files[0]
                     this.setState({
                       file

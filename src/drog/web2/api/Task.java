@@ -208,7 +208,6 @@ public class Task extends HttpServlet {
 							String[][] usersTable = table[i][0] == null ? null : conn.executeQuery(usersQueryTask,Integer.parseInt(table[i][0]));
 							YaySonArray ysa = new YaySonArray();
 							if(usersTable != null && usersTable.length>1){
-								System.out.println(usersTable.length);
 								for(Integer j = 1 ; j < usersTable.length ; j++){
 										YaySon ys = new YaySon();
 										ys.add("name", usersTable[j][1] == null?  "": usersTable[j][1]);

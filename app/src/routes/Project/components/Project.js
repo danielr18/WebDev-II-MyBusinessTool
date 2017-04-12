@@ -20,7 +20,6 @@ export default class Project extends Component {
 
   render() {
     const { tasks } = this.props
-
     return (
       <div className="container">
         <Row>
@@ -39,7 +38,7 @@ export default class Project extends Component {
                 {
                   tasks &&
                     tasks.filter(task => task.status === 'Created')
-                       .map(task => <TaskCard {...task} />)
+                       .map(task => <TaskCard {...task} changeStatus={this.props.changeStatus}/>)
                 }
               </Col>
               <Col sm={4}>
@@ -49,7 +48,7 @@ export default class Project extends Component {
                 {
                   tasks &&
                     tasks.filter(task => task.status === 'In Process')
-                       .map(task => <TaskCard {...task} />)
+                       .map(task => <TaskCard {...task} changeStatus={this.props.changeStatus}/>)
                 }
               </Col>
               <Col sm={4}>

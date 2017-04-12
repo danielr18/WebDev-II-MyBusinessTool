@@ -8,7 +8,7 @@
     "npm": "^3.0.0"
   },
   "scripts": {
-    "clean": "rm ../WebContent/* 2> /dev/null; exit 0",
+    "clean": "del /q ..\\WebContent\\*",
     "compile": "better-npm-run compile",
     "lint": "eslint bin build config server src tests",
     "lint:fix": "npm run lint -- --fix",

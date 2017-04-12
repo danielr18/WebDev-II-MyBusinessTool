@@ -46,7 +46,8 @@ export const createDocumentSuccess = (state, { document }) => Object.assign({}, 
 
 export const error = (state, { error }) => Object.assign({}, state, {
   error,
-  fetching: false
+  fetching: false,
+  documents : []
 })
 
 /* ------------- Hookup Reducers To Types ------------- */

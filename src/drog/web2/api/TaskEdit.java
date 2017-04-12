@@ -78,10 +78,18 @@ public class TaskEdit extends HttpServlet {
 				description = request.getParameter("description") == null? taskTable[1][2] : request.getParameter("description");
 				id_task_status = request.getParameter("id_task_status") == null? Integer.parseInt(taskTable[1][3]) : Integer.parseInt(request.getParameter("id_task_status"));
 				name = request.getParameter("name") == null?  taskTable[1][1] : request.getParameter("name"); 
-				if(request.getParameter("ended") != null){
+				if(id_task_status == 3){
 					updateQuery += ", ended_at=? ";
 					now = new Timestamp(System.currentTimeMillis());
 					conn.execute(updateQuery+updateFinisher, name, description,id_task_status,now,id_task);
+					String[][] usersT = conn.executeQuery(getUsers, id_task);
+					for(Integer id = 1; id < usersT.length; id++){
+						try {
+							NotificationSocket.sendNotification(Integer.parseInt(usersT[id][0]), "The task: \"" + name +"\"" + "Has been finished", "info");
+						} catch(NullPointerException | IOException e) {
+							System.out.println("User to be notified is not online.");
+						}
+					}
 				}
 				else{
 					updateQuery += updateFinisher;
@@ -143,8 +151,7 @@ public class TaskEdit extends HttpServlet {
 								}
 								
 							}
-							System.out.print(taskUsersQuery);
-							conn.execute(taskUsersQuery, id_task);
+							conn.execute(taskUsersQuery);
 						}
 					}
 				}
@@ -155,11 +162,6 @@ public class TaskEdit extends HttpServlet {
 				status = taskTable[1][5];
 				projectName= taskTable[1][6];
 				String ended_at = taskTable[1][7];
-//				String getUsers = "Select users.id_user, users.name, role.name "
-//						+ "FROM users "
-//						+ "INNER JOIN task_user ON users.id_user = task_user.id_user "
-//						+ "INNER JOIN role ON user.id_role = role.id_role "
-//						+ "WHERE task_user.id_task=? ";
 				String[][] usersTable = conn.executeQuery(getUsers, id_task);
 				YaySonArray ysa = usersTable.length < 2 ? null : new YaySonArray();
 				if(ysa != null){

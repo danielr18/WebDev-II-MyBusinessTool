@@ -21,13 +21,15 @@ public class NotificationSocket {
 	
 	public static void sendNotification(Integer id_user, String message, String level) throws IOException, NullPointerException {
 		//Level can be success, error, warning and info
-		String ws_session_id = NotificationSocketSession.socket_session_ids.get(id_user);
-		Session ws_session = clients.get(ws_session_id);
-		YaySon notif = new YaySon();
-		notif.add("type", "NOTIFICATION");
-		notif.add("level", level);
-		notif.add("msg", message);
-		ws_session.getBasicRemote().sendText(notif.toJSON());
+		synchronized(clients){
+			String ws_session_id = NotificationSocketSession.socket_session_ids.get(id_user);
+			Session ws_session = clients.get(ws_session_id);
+			YaySon notif = new YaySon();
+			notif.add("type", "NOTIFICATION");
+			notif.add("level", level);
+			notif.add("msg", message);
+			ws_session.getBasicRemote().sendText(notif.toJSON());
+		}
 	}
 	
 	@OnOpen
@@ -48,12 +50,14 @@ public class NotificationSocket {
 
 	@OnClose
     public void close(Session session) {
-		for (Entry<String, Session> entry : clients.entrySet()) {
-			if (entry.getValue() == session) {
-				System.out.println("closed");
-				clients.remove(entry.getKey());
-			}
-		} 
+		synchronized(clients){
+			for (Entry<String, Session> entry : clients.entrySet()) {
+				if (entry.getValue() == session) {
+					System.out.println("closed");
+					clients.remove(entry.getKey());
+				}
+			} 
+		}
 	}
 	
 	@OnError

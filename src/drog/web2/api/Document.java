@@ -97,7 +97,6 @@ public class Document extends HttpServlet {
 				document.add("id_document", documentTable[1][0]);
 				document.add("name", documentTable[1][1]);
 				document.add("path", documentTable[1][2]);
-				System.out.println(documentTable[1][0]);
 				res.add("status", 200);
 				res.add("data", document);
 			} catch(Exception e) {
@@ -152,7 +151,7 @@ public class Document extends HttpServlet {
 			        //handle it
 			    }        
 			    if(result) {    
-			        System.out.println("DIR created");  
+
 			    }
 		}
 		try{

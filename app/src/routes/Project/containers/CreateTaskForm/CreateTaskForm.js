@@ -33,6 +33,7 @@ export class CreateTaskForm extends Component {
     axios.get('/api/user?id_role=3')
       .then(response => {
         const users = response.data.data
+        //.filter( (user) => user.role !== "Admin" )
         this.setState({
           users
         })

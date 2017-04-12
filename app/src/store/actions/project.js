@@ -91,9 +91,29 @@ export const createTask = (id_project, task, assigned_users) => (dispatch, getSt
       })
     })
     .catch(err => {
-      console.log(err);
+
       dispatch({
         type: ProjectTypes.CREATE_TASK_ERROR,
+        error: err
+      })
+    })
+}
+
+export const changeTask = (task) => (dispatch, getState) => {
+  dispatch({ type: ProjectTypes.CHANGE_TASK })
+  //eslint-disable-next-line
+
+  return axios.post('api/task-edit', qs({...task}))
+    .then(({ data: { data } }) => {
+      dispatch({
+        type: ProjectTypes.CHANGE_TASK_SUCCESS,
+        task: data
+      })
+    })
+    .catch(err => {
+
+      dispatch({
+        type: ProjectTypes.CHANGE_TASK_ERROR,
         error: err
       })
     })

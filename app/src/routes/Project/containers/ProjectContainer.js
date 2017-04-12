@@ -16,7 +16,9 @@ const mapDispatchToProps = (dispatch) => ({
   //eslint-disable-next-line
   getProject: (id_project) => dispatch(ProjectActions.getProject(id_project)),
   //eslint-disable-next-line
-  getTasks: (id_project) => dispatch(ProjectActions.getTasks(id_project))
+  getTasks: (id_project) => dispatch(ProjectActions.getTasks(id_project)),
+
+  changeStatus: (task) => dispatch(ProjectActions.changeTask(task))
 })
 
 const mapStateToProps = (state) => ({
