@@ -74,20 +74,27 @@ export const createProject = (project) => (dispatch, getState) => {
 }
 
 //eslint-disable-next-line
-export const createTask = (id_project, task) => (dispatch, getState) => {
+export const createTask = (id_project, task, assigned_users) => (dispatch, getState) => {
   dispatch({ type: ProjectTypes.CREATE_TASK })
   //eslint-disable-next-line
   return axios.post('api/task', qs({id_project, ...task}))
     .then(({ data: { data } }) => {
-      dispatch({
-        type: ProjectTypes.CREATE_TASK_SUCCESS,
-        task: data
+      axios.post('api/task-edit', qs({
+        id_task: data.id_task,
+        assigned_users: assigned_users.join(',')
+      }))
+      .then(({ data: { data } }) => {
+        dispatch({
+          type: ProjectTypes.CREATE_TASK_SUCCESS,
+          task: data
+        })
       })
     })
-    .catch(({ response: { data } }) => {
+    .catch(err => {
+      console.log(err);
       dispatch({
         type: ProjectTypes.CREATE_TASK_ERROR,
-        error: data
+        error: err
       })
     })
 }

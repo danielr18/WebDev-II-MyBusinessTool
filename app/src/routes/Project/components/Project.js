@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 
 import './Project.scss'
 import CreateTaskForm from '../containers/CreateTaskForm'
+import TaskCard from './TaskCard'
 
 export default class Project extends Component {
 
@@ -18,6 +19,8 @@ export default class Project extends Component {
   }
 
   render() {
+    const { tasks } = this.props
+
     return (
       <div className="container">
         <Row>
@@ -33,16 +36,31 @@ export default class Project extends Component {
                 <div className="task-header">
                   <h4>Pending</h4>
                 </div>
+                {
+                  tasks &&
+                    tasks.filter(task => task.status === 'Created')
+                       .map(task => <TaskCard {...task} />)
+                }
               </Col>
               <Col sm={4}>
                 <div className="task-header">
                   <h4>In Process</h4>
                 </div>
+                {
+                  tasks &&
+                    tasks.filter(task => task.status === 'In Process')
+                       .map(task => <TaskCard {...task} />)
+                }
               </Col>
               <Col sm={4}>
                 <div className="task-header">
                   <h4>Completed</h4>
                 </div>
+                {
+                  tasks &&
+                    tasks.filter(task => task.status === 'Completed')
+                       .map(task => <TaskCard {...task} />)
+                }
               </Col>
             </Row>
           </Col>

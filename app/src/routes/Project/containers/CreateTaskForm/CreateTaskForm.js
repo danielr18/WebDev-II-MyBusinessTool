@@ -23,9 +23,9 @@ export class CreateTaskForm extends Component {
       users: [],
       task: {
         name: '',
-        description: '',
-        id_leader: null
-      }
+        description: ''
+      },
+      task_assigned_users: []
     }
   }
 
@@ -68,16 +68,14 @@ export class CreateTaskForm extends Component {
   }
 
   onLeaderChange = e => {
-    e.persist()
-    this.setState((state) => ({
-      task: Object.assign({}, state.task, {
-        id_leader: [...e.target.options].filter(({ selected }) => selected)
-                                        .map(({ value }) => value) })
-    }))
+    this.setState({
+      task_assigned_users: [...e.target.options].filter(({ selected }) => selected)
+                                                .map(({ value }) => value)
+    })
   }
 
   render() {
-    const { users, task } = this.state
+    const { users, task, task_assigned_users } = this.state
     const { id_project } = this.props
 
     return (
@@ -95,7 +93,7 @@ export class CreateTaskForm extends Component {
             <FormControl componentClass="textarea" placeholder="Describe the task..." />
           </FormGroup>
 
-          <FormGroup onChange={this.onLeaderChange} value={task.id_leader}>
+          <FormGroup onChange={this.onLeaderChange} value={task_assigned_users}>
             <ControlLabel>Assigned Employees</ControlLabel>
             <FormControl componentClass="select" placeholder="select" multiple>
               {
@@ -112,7 +110,7 @@ export class CreateTaskForm extends Component {
             <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
           </FormGroup>
         </Form>
-        <Button onClick={() => this.props.createTask(id_project, task)}>Create</Button>
+        <Button onClick={() => this.props.createTask(id_project, task, task_assigned_users)}>Create</Button>
       </Card>
     )
   }
@@ -123,7 +121,9 @@ const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  createTask: (id_project, task) => dispatch(ProjectActions.createTask(id_project, task))
+  createTask: (id_project, task, task_assigned_users) => dispatch(
+    ProjectActions.createTask(id_project, task, task_assigned_users)
+  )
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateTaskForm)

@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-  counter : state.counter
+  tasks : state.project.tasks
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
