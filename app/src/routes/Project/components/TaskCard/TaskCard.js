@@ -15,7 +15,7 @@ export const TaskCard = (props) => (
     </div>
 
     <footer className="card-footer">
-      <LinkContainer to={url(`/project/${props.id_task}`)}>
+      <LinkContainer to={url(`/task/${props.id_task}`)}>
         <Button className="primary-btn">View Task</Button>
       </LinkContainer>
     </footer>

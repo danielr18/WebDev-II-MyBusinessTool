@@ -33,10 +33,9 @@ export class CreateTaskForm extends Component {
     axios.get('/api/user?id_role=3')
       .then(response => {
         const users = response.data.data
-        this.setState((state) => ({
-          users,
-          task: Object.assign({}, state.task, { id_leader: users[0].id_user })
-        }))
+        this.setState({
+          users
+        })
       })
       .catch(response => {
         this.setState({
@@ -67,7 +66,7 @@ export class CreateTaskForm extends Component {
     }))
   }
 
-  onLeaderChange = e => {
+  onAssignedUsersChange = e => {
     this.setState({
       task_assigned_users: [...e.target.options].filter(({ selected }) => selected)
                                                 .map(({ value }) => value)
@@ -93,7 +92,7 @@ export class CreateTaskForm extends Component {
             <FormControl componentClass="textarea" placeholder="Describe the task..." />
           </FormGroup>
 
-          <FormGroup onChange={this.onLeaderChange} value={task_assigned_users}>
+          <FormGroup onChange={this.onAssignedUsersChange} value={task_assigned_users}>
             <ControlLabel>Assigned Employees</ControlLabel>
             <FormControl componentClass="select" placeholder="select" multiple>
               {
