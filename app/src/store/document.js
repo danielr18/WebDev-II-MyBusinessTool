@@ -39,7 +39,7 @@ export const getDocumentsSuccess = (state, { documents }) => Object.assign({}, s
 
 
 export const createDocumentSuccess = (state, { document }) => Object.assign({}, state, {
-  documents : [...state, document],
+  documents : [...state.documents, document],
   fetching: false,
   error: null
 })
@@ -53,9 +53,9 @@ export const error = (state, { error }) => Object.assign({}, state, {
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_DOCUMENTS]: request,
-  [Types.GET_DOCUMENTS_SUCCESS]: loginSuccess,
+  [Types.GET_DOCUMENTS_SUCCESS]: getDocumentsSuccess,
   [Types.GET_DOCUMENTS_ERROR]: error,
   [Types.CREATE_DOCUMENT]: request,
-  [Types.CREATE_DOCUMENT_SUCCESS]: signoutSuccess,
+  [Types.CREATE_DOCUMENT_SUCCESS]: createDocumentSuccess,
   [Types.CREATE_DOCUMENT_ERROR]: error
 })

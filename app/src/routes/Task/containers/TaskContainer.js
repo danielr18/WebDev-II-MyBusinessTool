@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import ProjectActions from 'store/project'
+import DocumentActions from 'store/document'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -16,11 +17,16 @@ const mapDispatchToProps = (dispatch) => ({
   //eslint-disable-next-line
   getProject: (id_project) => dispatch(ProjectActions.getProject(id_project)),
   //eslint-disable-next-line
-  getTasks: (id_project) => dispatch(ProjectActions.getTasks(id_project))
+  getTasks: (id_project) => dispatch(ProjectActions.getTasks(id_project)),
+
+  createDocument: (document,config) => dispatch(DocumentActions.createDocument(document,config)),
+
+  getDocuments: (id_task) => dispatch(DocumentActions.getDocuments(id_task))
 })
 
 const mapStateToProps = (state) => ({
-  tasks : state.project.tasks
+  tasks : state.project.tasks,
+  documents : state.documents
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

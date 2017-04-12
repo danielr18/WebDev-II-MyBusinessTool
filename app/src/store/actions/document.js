@@ -5,9 +5,8 @@ import { DocumentTypes } from '../document'
 
 export const getDocuments = (id_task) => (dispatch, getState) => {
   dispatch({ type: DocumentTypes.GET_DOCUMENTS })
-  return axios.post('api/task/docs', qs({ id_task}))
+  return axios.get('api/task/docs', { params: { id_task } })
     .then(({ data: { data } }) => {
-      console.log(data);
       dispatch({
         type: DocumentTypes.GET_DOCUMENTS_SUCCESS,
         documents: data
@@ -21,10 +20,9 @@ export const getDocuments = (id_task) => (dispatch, getState) => {
     })
 }
 
-export const createDocument = (document) => (dispatch, getState) => {
+export const createDocument = (document,config) => (dispatch, getState) => {
   dispatch({ type: DocumentTypes.CREATE_DOCUMENT })
-  console.log(document);
-  return axios.post('api/task/docs', document)
+  return axios.post('api/task/docs', document,config)
     .then(({data : data}) => {
       dispatch({
         type: DocumentTypes.CREATE_DOCUMENT_SUCCESS,
