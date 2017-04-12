@@ -58,7 +58,7 @@ public class Document extends HttpServlet {
 			}
 			else{
 				res.add("status",403);
-				res.add("error","Wrong arguemts");
+				res.add("error","Wrong arguments");
 			}
 		}
 		response.setStatus(res.getInteger("status"));
@@ -83,6 +83,7 @@ public class Document extends HttpServlet {
 			Integer id_task = Integer.parseInt(request.getParameter("id_task"));
 			String name = getFileName(file);
 			saveFile(file);
+
 			String insertQuery = "INSERT INTO document(name, path) VALUES (?,?) RETURNING id_document";
 			String insertTaskDocument = "INSERT INTO task_document(id_task, id_document) VALUES (?,?)";
 			String getQuery = "SELECT id_document, name, path FROM document WHERE id_document = ?";
@@ -96,6 +97,7 @@ public class Document extends HttpServlet {
 				document.add("id_document", documentTable[1][0]);
 				document.add("name", documentTable[1][1]);
 				document.add("path", documentTable[1][2]);
+				System.out.println(documentTable[1][0]);
 				res.add("status", 200);
 				res.add("data", document);
 			} catch(Exception e) {

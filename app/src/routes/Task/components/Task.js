@@ -6,19 +6,23 @@ import {
   Col,
   ControlLabel,
   FormControl,
-  HelpBlock
+  HelpBlock,
 } from 'react-bootstrap'
 import './Task.scss'
 import Card from 'components/Card'
 import axios from 'utils/axios'
-
+import url from 'utils/url'
+import DocumentActions from 'store/document'
+import { Link } from 'react-router'
 export default class Task extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       users: [],
-      task_assigned_users: []
+      documents : props.documents,
+      task_assigned_users: [],
+      file : null
     }
   }
 
@@ -36,17 +40,51 @@ export default class Task extends Component {
           users: []
         })
       })
+      // axios.get(`/api/task/docs?id_task=${this.props.params.id_task}`)
+      //   .then(response => {
+      //     const documents = response.data.data
+      //     this.setState({
+      //       documents
+      //     })
+      //   })
+      //   .catch(response => {
+      //     this.setState({
+      //       documents : []
+      //     })
+      //   })
+      this.props.getDocuments(this.props.params.id_task);
   }
 
   static propTypes = {
-    getTask: PropTypes.func.isRequired,
+    getTask: PropTypes.func,
     params: PropTypes.object
+  }
+
+  upload(file){
+    var fd = new FormData();
+    fd.append("file", file);
+    fd.append("id_task",this.props.params.id_task);
+    const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        };
+    this.props.createDocument(fd,config);
+  }
+
+  download(id_document){
+    const u = url(`/static/docs?id_document=${id_document}`);
+    axios.post(u,{headers: {"Access-Control-Allow-Origin": "*"}})
+      .then(response => {
+        window.open(u);
+      })
+      .catch(response => {
+      })
   }
 
   render() {
     const { users } = this.state
     const { task } = this.props
-
+    const { documents } = this.state
+    const u = url('/static/docs?id_document=')
     return (
       <div className="container">
         <Row>
@@ -70,8 +108,42 @@ export default class Task extends Component {
               </FormGroup>
             </Card>
           </Col>
-          <Col sm={4}>v</Col>
-          <Col sm={4}>v</Col>
+          <Col sm={4}>
+          <Card>
+            <FormGroup value={task ? [] : []}>
+              <ControlLabel>Related Documents</ControlLabel>
+                {
+
+                  documents.map(doc =>
+                    // <option
+                    //   key={doc.id_document}
+                    //   value={doc.id_document}
+                    //   onClick= {e => this.download(doc.id_document)}
+                    // >
+                    //   {doc.name}
+                    // </option>
+                    <Link to={`${u}${doc.id_document}`}>{doc.name}</Link>
+                  )
+                }
+              <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
+            </FormGroup>
+          </Card>
+          </Col>
+          <Col sm={4}>
+          <Card>
+            <FormGroup value={task ? [] : []}>
+              <ControlLabel>Related Documents</ControlLabel>
+                <FormControl type="file" value="" onChange = {e => {
+                  let file = e.target.files[0]
+                  this.setState({
+                    file
+                  })
+                }} />
+                <Button type="submit" value="" onClick={(e) => this.upload(this.state.file)}> Submit </Button>
+              <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
+            </FormGroup>
+          </Card>
+          </Col>
         </Row>
       </div>
     )
