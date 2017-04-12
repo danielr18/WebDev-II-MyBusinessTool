@@ -71,7 +71,7 @@ export default class Task extends Component {
   }
 
   download(id_document){
-    const u = url(`/static/docs?id_document=${id_document}`);
+    const u = `http://localhost:8080/MyBusinessTool/static/docs?id_document=${id_document}`;
     axios.post(u,{headers: {"Access-Control-Allow-Origin": "*"}})
       .then(response => {
         window.open(u);
@@ -84,7 +84,7 @@ export default class Task extends Component {
     const { users } = this.state
     const { task } = this.props
     const { documents } = this.state
-    const u = url('/static/docs?id_document=')
+    const u = 'http://localhost:8080/MyBusinessTool/static/docs?id_document=';
     return (
       <div className="container">
         <Row>
@@ -109,40 +109,28 @@ export default class Task extends Component {
             </Card>
           </Col>
           <Col sm={4}>
-          <Card>
-            <FormGroup value={task ? [] : []}>
-              <ControlLabel>Related Documents</ControlLabel>
-                {
-
-                  documents.map(doc =>
-                    // <option
-                    //   key={doc.id_document}
-                    //   value={doc.id_document}
-                    //   onClick= {e => this.download(doc.id_document)}
-                    // >
-                    //   {doc.name}
-                    // </option>
-                    <Link to={`${u}${doc.id_document}`}>{doc.name}</Link>
-                  )
-                }
-              <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
-            </FormGroup>
-          </Card>
+            <Card>
+              {
+                documents.map(doc =>
+                  <a href={`${u}${doc.id_document}`}>{doc.name}</a>
+                )
+              }
+            </Card>
           </Col>
           <Col sm={4}>
-          <Card>
-            <FormGroup value={task ? [] : []}>
-              <ControlLabel>Related Documents</ControlLabel>
-                <FormControl type="file" value="" onChange = {e => {
-                  let file = e.target.files[0]
-                  this.setState({
-                    file
-                  })
-                }} />
-                <Button type="submit" value="" onClick={(e) => this.upload(this.state.file)}> Submit </Button>
-              <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
-            </FormGroup>
-          </Card>
+            <Card>
+              <FormGroup value={task ? [] : []}>
+                <ControlLabel>Related Documents</ControlLabel>
+                  <FormControl type="file" value="" onChange = {e => {
+                    let file = e.target.files[0]
+                    this.setState({
+                      file
+                    })
+                  }} />
+                  <Button type="submit" value="" onClick={(e) => this.upload(this.state.file)}> Submit </Button>
+                <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
+              </FormGroup>
+            </Card>
           </Col>
         </Row>
       </div>
