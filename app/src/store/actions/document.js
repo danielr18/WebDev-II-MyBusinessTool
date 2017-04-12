@@ -2,7 +2,6 @@ import { stringify as qs } from 'qs'
 
 import axios from 'utils/axios'
 import { DocumentTypes } from '../document'
-import { ProjectTypes } from '../project'
 
 export const getDocuments = (id_task) => (dispatch, getState) => {
   dispatch({ type: DocumentTypes.GET_DOCUMENTS })
