@@ -1,4 +1,5 @@
 import { stringify as qs } from 'qs'
+import { browserHistory } from 'react-router'
 
 import axios from 'utils/axios'
 import { UserTypes } from '../user'
@@ -26,11 +27,12 @@ export const signout = () => (dispatch, getState) => {
   return axios.post('api/logout', {})
     .then(() => {
       dispatch({ type: ProjectTypes.PROJECT_RESET })
+      browserHistory.push('/')
       dispatch({
         type: UserTypes.SIGNOUT_SUCCESS
       })
     })
-    .catch(({ response: { data } }) => {
+    .catch((error) => {
       dispatch({
         type: UserTypes.SIGNOUT_ERROR,
         error: data

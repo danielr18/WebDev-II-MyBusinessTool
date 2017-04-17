@@ -3,6 +3,7 @@ import CoreLayout from '../layouts/CoreLayout'
 import Home from './Home'
 import TaskRoute from './Task'
 import ProjectRoute from './Project'
+import UsersRoute from './Users'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -13,7 +14,8 @@ export const createRoutes = (store) => ({
   indexRoute  : Home,
   childRoutes : [
     ProjectRoute(store),
-    TaskRoute(store)
+    TaskRoute(store),
+    UsersRoute(store)
   ]
 })
 

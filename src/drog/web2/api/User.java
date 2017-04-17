@@ -58,8 +58,7 @@ public class User extends HttpServlet {
 				res = getUsersForTask(id_task);
 			}
 			else{
-				res.add("status",403);
-				res.add("error", "Wrong Arguments");
+				res = getUsers();
 			}
 		}
 		response.setStatus(res.getInteger("status"));
@@ -84,16 +83,15 @@ public class User extends HttpServlet {
 		String getQuery = "Select users.id_user, users.name, role.name, users.email, users.password, role.id_role "
 				+ "From users "
 				+ "INNER JOIN role ON users.id_role = role.id_role "
-				+ "WHERE users.id_user = ?";
+				+ "WHERE users.id_user = ?;";
 		try {
 			JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
 			String[][] insert_result = conn.executeQuery(insertQuery, id_role,name,password,email);
 			String[][] usersTable = conn.executeQuery(getQuery, Integer.parseInt(insert_result[1][0]));
 			YaySon JUser = new YaySon();
-			JUser.add("id_user", usersTable[1][0]);
+			JUser.add("id_user", Integer.parseInt(usersTable[1][0]));
 			JUser.add("name", usersTable[1][1]);
 			JUser.add("role", usersTable[1][2]);
-			JUser.add("password", usersTable[1][4]);
 			JUser.add("email", usersTable[1][3]);
 			res.add("data",JUser);
 			drog.web2.User user = new drog.web2.User(Integer.parseInt(usersTable[1][0]),Integer.parseInt(usersTable[1][5]),usersTable[1][1],usersTable[1][4]);
@@ -119,16 +117,15 @@ public class User extends HttpServlet {
 			res.add("error", "No permission to access this resource");
 		}
 		else{
-			Integer id_user = user.getUserId();
-			String deleteQuery = "DELETE FROM users WHERE id_user =? RETURNING id_user";
+			Integer id_user = Integer.parseInt(request.getParameter("id_user"));
+			String deleteQuery = "UPDATE users SET deleted=true WHERE id_user = ? RETURNING id_user";
 			try{
 				JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
 				String[][] delete_result = conn.executeQuery(deleteQuery, id_user);
 				YaySon JUser = new YaySon();
-				JUser.add("id_user",delete_result[1][0]);
+				JUser.add("id_user", Integer.parseInt(delete_result[1][0]));
 				res.add("data",JUser);
 				res.add("status",200);
-				session.invalidate();
 			} catch (Exception e){
 				res.add("error","Internal server Error");
 				res.add("status",500);
@@ -138,13 +135,42 @@ public class User extends HttpServlet {
 		response.getWriter().print(res.toJSON());
 	}
 	
+	private YaySon getUsers(){ 
+		YaySon res = new YaySon();
+		String query = "Select users.id_user, users.name, users.email, role.name, role.id_role "
+				+ "From users "
+				+ "INNER JOIN role ON users.id_role = role.id_role "
+				+ "where users.deleted is NULL;";
+		try{
+			String[][] usersTable = null;
+			JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");						
+			usersTable = conn.executeQuery(query);
+			YaySonArray users= new YaySonArray();
+			for(Integer i =1 ; i < usersTable.length ; i++){
+				YaySon JUser = new YaySon();
+				JUser.add("id_user", Integer.parseInt(usersTable[i][0]));
+				JUser.add("name", usersTable[i][1]);
+				JUser.add("email", usersTable[i][2]);
+				JUser.add("role", usersTable[i][3]);
+				JUser.add("id_role", Integer.parseInt(usersTable[i][4]));
+				users.push(JUser);
+			}
+			res.add("status",200);
+			res.add("data",users);
+		} catch (Exception e){
+			res.add("status",403);
+			res.add("data","Invalid user");
+		}
+		return res;
+
+	}
 	
 	private YaySon getUsersAboveRole(Integer id_role){
 		YaySon res = new YaySon();
 		String query = "Select users.id_user, users.name, role.name "
 				+ "From users "
 				+ "INNER JOIN role ON users.id_role = role.id_role "
-				+ "WHERE users.id_role <= ?";
+				+ "WHERE users.id_role <= ? and users.deleted is NULL";
 		try{
 			String[][] usersTable = null;
 			JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");						
@@ -153,7 +179,7 @@ public class User extends HttpServlet {
 			
 			for(Integer i =1 ; i < usersTable.length ; i++){
 				YaySon JUser = new YaySon();
-				JUser.add("id_user", usersTable[i][0]);
+				JUser.add("id_user", Integer.parseInt(usersTable[i][0]));
 				JUser.add("name", usersTable[i][1]);
 				JUser.add("role", usersTable[i][2]);
 				users.push(JUser);
@@ -179,7 +205,7 @@ public class User extends HttpServlet {
 			JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");						
 			usersTable = conn.executeQuery(query, id_user);
 			YaySon JUser = new YaySon();
-			JUser.add("id_user", usersTable[1][0]);
+			JUser.add("id_user", Integer.parseInt(usersTable[1][0]));
 			JUser.add("name", usersTable[1][1]);
 			JUser.add("role", usersTable[1][2]);
 			res.add("status",200);

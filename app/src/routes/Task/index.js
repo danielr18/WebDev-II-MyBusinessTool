@@ -9,14 +9,14 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Counter = require('./containers/TaskContainer').default
+      const Task = require('./containers/TaskContainer').default
       // const reducer = require('./modules/project').default
       //
       // /*  Add the reducer to the store on key 'counter'  */
       // injectReducer(store, { key: 'project', reducer })
 
       /*  Return getComponent   */
-      cb(null, Counter)
+      cb(null, Task)
 
     /* Webpack named bundle   */
     }, 'task')

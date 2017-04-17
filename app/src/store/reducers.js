@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 import locationReducer from './location'
 import { reducer as userReducer } from './user'
 import { reducer as projectReducer } from './project'
-import { reducer as documentReducer} from './document'
+import { reducer as adminReducer } from './admin'
+import { reducer as documentReducer } from './document'
 import { reducer as socketReducer } from './socket'
 
 export const makeRootReducer = (asyncReducers) => {
@@ -12,6 +13,7 @@ export const makeRootReducer = (asyncReducers) => {
     project: projectReducer,
     document : documentReducer,
     ws: socketReducer,
+    admin: adminReducer,
     ...asyncReducers
   })
 }

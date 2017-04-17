@@ -19,6 +19,7 @@ export default class Task extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      task: null,
       users: [],
       documents : [],
       task_assigned_users: [],
@@ -40,19 +41,21 @@ export default class Task extends Component {
           users: []
         })
       })
-      // axios.get(`/api/task/docs?id_task=${this.props.params.id_task}`)
-      //   .then(response => {
-      //     const documents = response.data.data
-      //     this.setState({
-      //       documents
-      //     })
-      //   })
-      //   .catch(response => {
-      //     this.setState({
-      //       documents : []
-      //     })
-      //   })
-      this.props.getDocuments(this.props.params.id_task);
+
+    axios.get(`/api/task?id_task=${this.props.params.id_task}`)
+      .then(response => {
+        const task = response.data.data
+        this.setState({
+          task
+        })
+      })
+      .catch(response => {
+        this.setState({
+          users: []
+        })
+      })
+
+    this.props.getDocuments(this.props.params.id_task);
   }
 
   static propTypes = {
@@ -92,8 +95,7 @@ export default class Task extends Component {
   }
 
   render() {
-    const { users } = this.state
-    const { task } = this.props
+    const { users, task } = this.state
     const { documents } = this.props
     const u = 'http://localhost:8080/MyBusinessTool/static/docs?id_document=';
     return (
@@ -115,13 +117,14 @@ export default class Task extends Component {
                     )
                   }
                 </FormControl>
-                <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
               </FormGroup>
             </Card>
           </Col>
           <Col sm={4}>
             <Card>
-            <ControlLabel>Assigned Documents</ControlLabel>
+              { task && <h3>{task.name}</h3> }
+              { task && <p>{task.description}</p> }
+              <ControlLabel>Assigned Documents</ControlLabel>
               {
                 documents.map(doc =>
                   <div>
@@ -142,7 +145,6 @@ export default class Task extends Component {
                     })
                   }} />
                   <Button type="submit" value="" onClick={(e) => this.upload(this.state.file)}> Submit </Button>
-                <HelpBlock>Hold Ctrl to select multiple users</HelpBlock>
               </FormGroup>
             </Card>
           </Col>

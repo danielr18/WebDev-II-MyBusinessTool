@@ -59,7 +59,7 @@ public class TaskEdit extends HttpServlet {
 					+ "FROM task "
 					+ "WHERE task.id_task=?";
 			String getQuery = "SELECT task.id_task, task.name, task.description, task.created_at, task.id_task_status, task_status.name, "
-					+ "project.name, task.ended_at "
+					+ "project.name, task.ended_at, project.id_project, project.id_leader "
 					+ "FROM task "
 					+ "INNER JOIN task_status ON task.id_task_status = task_status.id_task_status "
 					+ "INNER JOIN project ON task.id_project = project.id_project "
@@ -162,6 +162,8 @@ public class TaskEdit extends HttpServlet {
 				status = taskTable[1][5];
 				projectName= taskTable[1][6];
 				String ended_at = taskTable[1][7];
+				Integer id_project = Integer.parseInt(taskTable[1][8]);
+				Integer id_leader = Integer.parseInt(taskTable[1][9]);
 				String[][] usersTable = conn.executeQuery(getUsers, id_task);
 				YaySonArray ysa = usersTable.length < 2 ? null : new YaySonArray();
 				if(ysa != null){
@@ -172,6 +174,20 @@ public class TaskEdit extends HttpServlet {
 						ysa.push(ys);
 					}
 				}
+				
+				if (isProjectCompleted(id_project)) {
+			    	String usersQuery = "select users.id_user from users where id_role=1 or id_user=?";
+					String[][] usersToNotifyTable = conn.executeQuery(usersQuery, id_leader);
+					for(Integer i = 1; i < usersToNotifyTable.length; i++) {
+						try {
+							System.out.println(usersToNotifyTable[i][0]);
+							NotificationSocket.sendNotification(Integer.parseInt(usersToNotifyTable[i][0]), "Project \"" + projectName +"\" has been completed", "success");
+						} catch(NullPointerException | IOException e) {
+							System.out.println("User to be notified is not online.");
+						}
+					}
+				}
+				
 				YaySon task = new YaySon();
 				task.add("id_task", id_task);
 				task.add("id_project", projectName);
@@ -192,5 +208,13 @@ public class TaskEdit extends HttpServlet {
 		response.setStatus(res.getInteger("status"));
 		response.getWriter().print(res.toJSON());
 	}
+    
+    private boolean isProjectCompleted(Integer id_project) {
+		JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
+    	String countQuery = "select count(id_task) from task inner join project on task.id_project=project.id_project where task.id_project=? and task.ended_at is null group by id_task";
+		String[][] countTable = conn.executeQuery(countQuery, id_project);
+		System.out.println(countTable.length <= 1);
+		return countTable.length <= 1;
+    }
 
 }

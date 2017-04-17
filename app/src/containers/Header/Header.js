@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { IndexLink } from 'react-router'
+import { IndexLink, Link, browserHistory } from 'react-router'
 import { LinkContainer } from 'react-router-bootstrap'
 import {
   Navbar,
@@ -78,6 +78,10 @@ export class Header extends Component {
     })
   }
 
+  signout = () => {
+    this.props.signout()
+  }
+
   renderAuthDropdown = () => {
     const { isAuthDropdownOpen, email, password } = this.state
 
@@ -138,7 +142,7 @@ export class Header extends Component {
         <div className="user-dropdown">
           <Button
             className="logout-btn"
-            onClick={this.props.signout}
+            onClick={this.signout}
           >
             Sign Out
           </Button>
@@ -162,13 +166,20 @@ export class Header extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav />
-          <Nav pullRight>
-            {user ? (
-              this.renderUserDropdown()
-            ) : (
-              this.renderAuthDropdown()
-            )}
-          </Nav>
+          {user ? (
+            <Nav pullRight>
+              {user.id_role === 1 &&
+                <LinkContainer to={url('/admin-users')}>
+                  <NavItem>Users Management</NavItem>
+                </LinkContainer>
+              }
+              {this.renderUserDropdown()}
+            </Nav>
+          ) : (
+            <Nav pullRight>
+              {this.renderAuthDropdown()}
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Navbar>
     )

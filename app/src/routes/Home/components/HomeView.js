@@ -48,24 +48,17 @@ export class HomeView extends Component {
 
     return (
       <div className="container">
+        <div className="projects-header">
+          <h2>Projects</h2>
+        </div>
         <Row>
-          <Col sm={4}>
-            <CreateProjectForm />
-          </Col>
-          <Col sm={8}>
-            <div className="projects-header">
-              <h2>Projects</h2>
-            </div>
-            <Row>
-              {
-                projects.map(project => (
-                  <Col md={4} sm={6} className="col-project-card">
-                    <ProjectCard {...project} />
-                  </Col>
-                ))
-              }
-            </Row>
-          </Col>
+          {
+            projects.map(project => (
+              <Col sm={4} className="col-project-card">
+                <ProjectCard {...project} />
+              </Col>
+            ))
+          }
         </Row>
       </div>
     )

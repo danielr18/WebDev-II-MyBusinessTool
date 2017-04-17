@@ -48,14 +48,15 @@ public class Project extends HttpServlet {
 		
 			if (id_project != null) {
 				try {
-					String query = "SELECT id_project, name, description, created_at FROM project where id_project=?";
+					String query = "SELECT id_project, name, description, created_at, id_leader FROM project where id_project=?";
 					JDBConnection conn = new JDBConnection("localhost", 5432, "my_business_tool", "postgres", "masterkey");
 					String[][] table = conn.executeQuery(query, Integer.parseInt(id_project));
 					YaySon project = new YaySon();
-					project.add("id_project", id_project);
+					project.add("id_project", Integer.parseInt(id_project));
 					project.add("name", table[1][1]);
 					project.add("description", table[1][2]);
 					project.add("created_at", table[1][3]);
+					project.add("id_leader", Integer.parseInt(table[1][4]));
 					res.add("status", 200);
 					res.add("data", project);
 				} catch(Exception e) {
